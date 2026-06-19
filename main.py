@@ -222,7 +222,9 @@ def add_notice_to_doc(doc, notice, token):
 @app.get("/", response_class=HTMLResponse)
 async def root():
     """프론트엔드 HTML을 서빙한다"""
-    with open("index.html", encoding="utf-8") as f:
+    import os
+    html_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
+    with open(html_path, encoding="utf-8") as f:
         return f.read()
 
 
