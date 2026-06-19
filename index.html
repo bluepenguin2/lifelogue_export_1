@@ -6,7 +6,6 @@
   <title>라이프로그 알림장 백업</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f5f7fa;
@@ -16,7 +15,6 @@
       align-items: center;
       padding: 24px 16px;
     }
-
     .card {
       background: white;
       border-radius: 16px;
@@ -25,143 +23,50 @@
       max-width: 420px;
       box-shadow: 0 2px 16px rgba(0,0,0,0.08);
     }
-
-    h1 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #1a1a2e;
-      margin-bottom: 6px;
-    }
-
-    .subtitle {
-      font-size: 13px;
-      color: #888;
-      margin-bottom: 28px;
-      line-height: 1.5;
-    }
-
-    .step {
-      display: none;
-    }
-    .step.active {
-      display: block;
-    }
-
+    h1 { font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #888; margin-bottom: 28px; line-height: 1.5; }
+    .step { display: none; }
+    .step.active { display: block; }
     .step-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #6c63ff;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
+      font-size: 12px; font-weight: 600; color: #6c63ff;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
     }
-
-    label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 8px;
-    }
-
+    label { display: block; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 8px; }
     input[type="month"] {
-      width: 100%;
-      padding: 14px;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 16px;
-      color: #333;
-      outline: none;
-      transition: border-color 0.2s;
+      width: 100%; padding: 14px; border: 1.5px solid #e0e0e0;
+      border-radius: 10px; font-size: 16px; color: #333; outline: none;
     }
-    input[type="month"]:focus {
-      border-color: #6c63ff;
-    }
-
+    input[type="month"]:focus { border-color: #6c63ff; }
     .btn {
-      width: 100%;
-      padding: 15px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 16px;
-      transition: opacity 0.2s, transform 0.1s;
+      width: 100%; padding: 15px; border: none; border-radius: 10px;
+      font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 16px;
     }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary {
-      background: #6c63ff;
-      color: white;
-    }
-    .btn-primary:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-    .btn-secondary {
-      background: #f0eeff;
-      color: #6c63ff;
-    }
-
+    .btn-primary { background: #6c63ff; color: white; }
+    .btn-secondary { background: #f0eeff; color: #6c63ff; }
     .info-box {
-      background: #f0eeff;
-      border-radius: 10px;
-      padding: 14px 16px;
-      font-size: 13px;
-      color: #444;
-      line-height: 1.7;
-      margin-bottom: 16px;
+      background: #f0eeff; border-radius: 10px; padding: 14px 16px;
+      font-size: 13px; color: #444; line-height: 1.8; margin-bottom: 16px;
     }
     .info-box strong { color: #6c63ff; }
-
-    .progress-wrap {
-      margin: 16px 0;
+    .info-box .step-num {
+      display: inline-block; background: #6c63ff; color: white;
+      border-radius: 50%; width: 20px; height: 20px;
+      text-align: center; line-height: 20px; font-size: 11px;
+      font-weight: 700; margin-right: 4px;
     }
-    .progress-bar-bg {
-      background: #e0e0e0;
-      border-radius: 99px;
-      height: 8px;
-      overflow: hidden;
-    }
-    .progress-bar {
-      height: 100%;
-      background: #6c63ff;
-      border-radius: 99px;
-      width: 0%;
-      transition: width 0.4s;
-    }
-    .progress-text {
-      font-size: 13px;
-      color: #666;
-      margin-top: 8px;
-      text-align: center;
-    }
-
-    .status-msg {
-      font-size: 14px;
-      color: #333;
-      text-align: center;
-      margin: 12px 0;
-      line-height: 1.6;
-    }
-
-    .error-msg {
-      color: #e53e3e;
-      font-size: 13px;
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    .success-icon {
-      font-size: 48px;
-      text-align: center;
-      margin: 8px 0 16px;
-    }
-
-    .divider {
-      border: none;
-      border-top: 1px solid #f0f0f0;
-      margin: 20px 0;
+    .progress-wrap { margin: 16px 0; }
+    .progress-bar-bg { background: #e0e0e0; border-radius: 99px; height: 8px; overflow: hidden; }
+    .progress-bar { height: 100%; background: #6c63ff; border-radius: 99px; width: 0%; transition: width 0.4s; }
+    .progress-text { font-size: 13px; color: #666; margin-top: 8px; text-align: center; }
+    .status-msg { font-size: 14px; color: #333; text-align: center; margin: 12px 0; line-height: 1.6; }
+    .error-msg { color: #e53e3e; font-size: 13px; margin-top: 10px; text-align: center; }
+    .success-icon { font-size: 48px; text-align: center; margin: 8px 0 16px; }
+    .divider { border: none; border-top: 1px solid #f0f0f0; margin: 16px 0; }
+    .login-link {
+      display: block; text-align: center; margin-top: 16px;
+      padding: 15px; background: #6c63ff; color: white;
+      border-radius: 10px; font-size: 16px; font-weight: 600;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -179,17 +84,20 @@
     <div class="error-msg" id="step1Error"></div>
   </div>
 
-  <!-- STEP 2: 라이프로그 로그인 -->
+  <!-- STEP 2: 라이프로그 로그인 안내 -->
   <div class="step" id="step2">
     <div class="step-label">Step 2 / 3 — 로그인</div>
     <div class="info-box">
-      아래 버튼을 누르면 <strong>라이프로그 로그인 창</strong>이 열립니다.<br>
-      <strong>라이프로그 앱</strong>으로 QR코드를 스캔해주세요.<br>
-      로그인 완료 후 이 화면으로 돌아오세요.
+      <span class="step-num">1</span> 아래 버튼을 눌러 <strong>라이프로그 로그인</strong> 페이지로 이동하세요.<br><br>
+      <span class="step-num">2</span> <strong>라이프로그 앱</strong>으로 QR코드를 스캔하세요.<br><br>
+      <span class="step-num">3</span> 로그인 완료 후 <strong>브라우저의 뒤로가기</strong>로 이 화면으로 돌아오세요.<br><br>
+      <span class="step-num">4</span> 아래 <strong>"로그인 완료"</strong> 버튼을 누르세요.
     </div>
-    <button class="btn btn-primary" onclick="openLogin()">라이프로그 로그인 열기</button>
-    <hr class="divider">
-    <button class="btn btn-secondary" id="confirmLoginBtn" onclick="confirmLogin()" style="display:none">
+    <a class="login-link" href="https://lifelogue.kr/auth/qrcode/login" target="_blank">
+      🔐 라이프로그 로그인하기
+    </a>
+    <div class="divider"></div>
+    <button class="btn btn-secondary" onclick="confirmLogin()">
       ✅ 로그인 완료 — 다음으로
     </button>
     <div class="status-msg" id="step2Status"></div>
@@ -216,34 +124,25 @@
       다운로드가 자동으로 시작됩니다.<br>
       시작되지 않으면 아래 버튼을 눌러주세요.
     </div>
-    <button class="btn btn-primary" id="downloadBtn" onclick="downloadFile()">
-      📥 파일 다운로드
-    </button>
-    <button class="btn btn-secondary" onclick="restart()" style="margin-top:10px">
-      처음으로
-    </button>
+    <button class="btn btn-primary" onclick="downloadFile()">📥 파일 다운로드</button>
+    <button class="btn btn-secondary" onclick="restart()" style="margin-top:10px">처음으로</button>
   </div>
-
 </div>
 
 <script>
-  // 서버 주소 (배포 후 실제 주소로 변경)
   const SERVER = window.location.origin;
-
-  let loginPopup = null;
   let token = null;
   let startYear = null;
   let startMonth = null;
   let downloadBlob = null;
   let downloadFilename = null;
-  let tokenCheckInterval = null;
 
   function showStep(n) {
     document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
     document.getElementById('step' + n).classList.add('active');
   }
 
-  // ── STEP 1: 연월 입력 ──
+  // STEP 1
   function goStep2() {
     const val = document.getElementById('startMonth').value;
     if (!val) {
@@ -255,77 +154,67 @@
     showStep(2);
   }
 
-  // ── STEP 2: 로그인 팝업 ──
-  function openLogin() {
-    loginPopup = window.open(
-      'https://lifelogue.kr/auth/qrcode/login',
-      'lifelogue_login',
-      'width=420,height=680'
-    );
+  // STEP 2: 로그인 완료 버튼
+  async function confirmLogin() {
+    document.getElementById('step2Error').textContent = '';
+    document.getElementById('step2Status').textContent = '서버에서 토큰을 가져오는 중...';
 
-    document.getElementById('step2Status').textContent =
-      'QR코드를 스캔한 후, 로그인 완료 버튼을 눌러주세요.';
-    document.getElementById('confirmLoginBtn').style.display = 'block';
-
-    // 팝업이 대시보드 URL로 전환되면 자동 감지 시도
-    tokenCheckInterval = setInterval(() => {
-      try {
-        if (loginPopup && loginPopup.closed) {
-          clearInterval(tokenCheckInterval);
-          document.getElementById('step2Status').textContent =
-            '창이 닫혔습니다. 아래 버튼으로 계속 진행해주세요.';
-          return;
-        }
-        // 같은 origin이면 localStorage 접근 가능
-        const t = loginPopup.localStorage.getItem('accessToken');
-        if (t) {
-          clearInterval(tokenCheckInterval);
-          token = 'Bearer ' + t;
-          proceedAfterLogin();
-        }
-      } catch (e) {
-        // cross-origin 제약으로 접근 불가 — 사용자가 직접 버튼 누르도록 유도
-      }
-    }, 1000);
-  }
-
-  function confirmLogin() {
-    clearInterval(tokenCheckInterval);
-
-    // 팝업 localStorage에서 토큰 읽기 시도
     try {
-      if (loginPopup && !loginPopup.closed) {
-        const t = loginPopup.localStorage.getItem('accessToken');
-        if (t) {
-          token = 'Bearer ' + t;
-          loginPopup.close();
-          proceedAfterLogin();
-          return;
-        }
+      // 서버에 토큰 조회 요청 (서버가 라이프로그에서 직접 토큰을 가져올 수 없으므로
+      // 브라우저의 localStorage에서 읽어서 전달)
+      const res = await fetch(`${SERVER}/api/get-token`, { method: 'POST' });
+      const data = await res.json();
+
+      if (data.token) {
+        token = data.token.startsWith('Bearer ') ? data.token : 'Bearer ' + data.token;
+        await proceedAfterLogin();
+      } else {
+        throw new Error('토큰 없음');
       }
     } catch (e) {
-      // cross-origin 차단 — fallback: 사용자에게 직접 입력 요청
+      // 서버 방식 실패 → 사용자가 직접 붙여넣기
+      document.getElementById('step2Status').textContent = '';
+      showManualInput();
     }
+  }
 
-    // fallback: 토큰 직접 입력
-    const manual = prompt(
-      '자동 토큰 추출에 실패했습니다.\n\n' +
-      '라이프로그 로그인 창 > 개발자도구(F12) > Console에서\n' +
-      'localStorage.getItem("accessToken")\n' +
-      '를 입력하고 결과값을 복사해서 붙여넣어주세요.'
-    );
-    if (manual && manual.trim()) {
-      token = manual.trim().startsWith('Bearer ') ? manual.trim() : 'Bearer ' + manual.trim();
-      if (loginPopup && !loginPopup.closed) loginPopup.close();
-      proceedAfterLogin();
-    } else {
-      document.getElementById('step2Error').textContent = '토큰을 입력하지 않았습니다. 다시 시도해주세요.';
+  function showManualInput() {
+    // 모바일 친화적 수동 입력 UI
+    document.getElementById('step2Status').innerHTML = `
+      <div style="text-align:left; margin-top:8px;">
+        <p style="font-size:13px; color:#555; margin-bottom:10px;">
+          아래 단계를 따라 토큰을 붙여넣어 주세요:
+        </p>
+        <ol style="font-size:12px; color:#555; padding-left:18px; line-height:2;">
+          <li>라이프로그 로그인 페이지에서 로그인 완료</li>
+          <li>주소창에 아래를 입력 후 복사:<br>
+            <code style="background:#f0f0f0; padding:4px 8px; border-radius:4px; font-size:11px; display:block; margin:4px 0; word-break:break-all;">
+              javascript:copy(localStorage.getItem('accessToken'))
+            </code>
+          </li>
+          <li>아래 칸에 붙여넣기 후 확인 버튼</li>
+        </ol>
+        <textarea id="manualToken" rows="4"
+          style="width:100%; margin-top:10px; padding:10px; border:1.5px solid #e0e0e0;
+                 border-radius:8px; font-size:12px; resize:none; outline:none;"
+          placeholder="토큰을 여기에 붙여넣으세요..."></textarea>
+        <button class="btn btn-primary" style="margin-top:8px" onclick="submitManualToken()">확인</button>
+      </div>
+    `;
+  }
+
+  async function submitManualToken() {
+    const val = document.getElementById('manualToken').value.trim();
+    if (!val) {
+      alert('토큰을 입력해주세요.');
+      return;
     }
+    token = val.startsWith('Bearer ') ? val : 'Bearer ' + val;
+    await proceedAfterLogin();
   }
 
   async function proceedAfterLogin() {
-    // 토큰 유효성 검증
-    document.getElementById('step2Status').textContent = '사용자 정보 확인 중...';
+    document.getElementById('step2Status').innerHTML = '사용자 정보 확인 중...';
     try {
       const res = await fetch(`${SERVER}/api/user-info`, {
         method: 'POST',
@@ -334,53 +223,40 @@
       });
       if (!res.ok) throw new Error(await res.text());
       const info = await res.json();
-      document.getElementById('step2Status').textContent =
+      document.getElementById('step2Status').innerHTML =
         `✅ ${info.orgName} / ${info.childName}`;
       setTimeout(() => generateFile(info), 800);
     } catch (e) {
       document.getElementById('step2Error').textContent =
-        '로그인 확인에 실패했습니다. 다시 로그인해주세요.';
+        '로그인 확인 실패. 다시 로그인 후 시도해주세요.';
+      document.getElementById('step2Status').textContent = '';
     }
   }
 
-  // ── STEP 3: 파일 생성 ──
+  // STEP 3
   async function generateFile(userInfo) {
     showStep(3);
     setProgress(10, '서버에 요청 중...');
-
     try {
-      setProgress(30, `${userInfo.childName}의 알림장을 수집하는 중...`);
-
+      setProgress(30, `${userInfo.childName}의 알림장 수집 중...`);
       const res = await fetch(`${SERVER}/api/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, start_year: startYear, start_month: startMonth }),
       });
-
-      if (!res.ok) {
-        const err = await res.text();
-        throw new Error(err);
-      }
-
+      if (!res.ok) throw new Error(await res.text());
       setProgress(90, 'Word 파일 생성 중...');
-
       const blob = await res.blob();
       const disposition = res.headers.get('Content-Disposition') || '';
       const nameMatch = disposition.match(/filename\*=UTF-8''(.+)/);
       downloadFilename = nameMatch
         ? decodeURIComponent(nameMatch[1])
         : `${userInfo.childName}_알림장.docx`;
-
       downloadBlob = blob;
       setProgress(100, '완료!');
-      setTimeout(() => {
-        showStep(4);
-        downloadFile();
-      }, 600);
-
+      setTimeout(() => { showStep(4); downloadFile(); }, 600);
     } catch (e) {
-      document.getElementById('step3Status').textContent =
-        `오류가 발생했습니다:\n${e.message}`;
+      document.getElementById('step3Status').textContent = `오류: ${e.message}`;
     }
   }
 
@@ -389,7 +265,7 @@
     document.getElementById('progressText').textContent = text;
   }
 
-  // ── STEP 4: 다운로드 ──
+  // STEP 4
   function downloadFile() {
     if (!downloadBlob) return;
     const url = URL.createObjectURL(downloadBlob);
@@ -405,7 +281,6 @@
     document.getElementById('startMonth').value = '';
     document.getElementById('step2Status').textContent = '';
     document.getElementById('step2Error').textContent = '';
-    document.getElementById('confirmLoginBtn').style.display = 'none';
     showStep(1);
   }
 </script>
