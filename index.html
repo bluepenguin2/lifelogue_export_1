@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>라이프로그 알림장 백업</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fa;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px 20px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+
+    .step-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6c63ff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    input[type="month"] {
+      width: 100%;
+      padding: 14px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 16px;
+      color: #333;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="month"]:focus {
+      border-color: #6c63ff;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: #6c63ff;
+      color: white;
+    }
+    .btn-primary:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: #f0eeff;
+      color: #6c63ff;
+    }
+
+    .info-box {
+      background: #f0eeff;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #444;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .info-box strong { color: #6c63ff; }
+
+    .progress-wrap {
+      margin: 16px 0;
+    }
+    .progress-bar-bg {
+      background: #e0e0e0;
+      border-radius: 99px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #6c63ff;
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.4s;
+    }
+    .progress-text {
+      font-size: 13px;
+      color: #666;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .status-msg {
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+      margin: 12px 0;
+      line-height: 1.6;
+    }
+
+    .error-msg {
+      color: #e53e3e;
+      font-size: 13px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .success-icon {
+      font-size: 48px;
+      text-align: center;
+      margin: 8px 0 16px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #f0f0f0;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>📋 알림장 백업</h1>
+  <p class="subtitle">라이프로그 알림장을 Word 파일로 저장합니다</p>
+
+  <!-- STEP 1: 시작 연월 입력 -->
+  <div class="step active" id="step1">
+    <div class="step-label">Step 1 / 3 — 기간 설정</div>
+    <label for="startMonth">알림장 시작 연월</label>
+    <input type="month" id="startMonth" />
+    <button class="btn btn-primary" onclick="goStep2()">다음</button>
+    <div class="error-msg" id="step1Error"></div>
+  </div>
+
+  <!-- STEP 2: 라이프로그 로그인 -->
+  <div class="step" id="step2">
+    <div class="step-label">Step 2 / 3 — 로그인</div>
+    <div class="info-box">
+      아래 버튼을 누르면 <strong>라이프로그 로그인 창</strong>이 열립니다.<br>
+      <strong>라이프로그 앱</strong>으로 QR코드를 스캔해주세요.<br>
+      로그인 완료 후 이 화면으로 돌아오세요.
+    </div>
+    <button class="btn btn-primary" onclick="openLogin()">라이프로그 로그인 열기</button>
+    <hr class="divider">
+    <button class="btn btn-secondary" id="confirmLoginBtn" onclick="confirmLogin()" style="display:none">
+      ✅ 로그인 완료 — 다음으로
+    </button>
+    <div class="status-msg" id="step2Status"></div>
+    <div class="error-msg" id="step2Error"></div>
+  </div>
+
+  <!-- STEP 3: 생성 중 -->
+  <div class="step" id="step3">
+    <div class="step-label">Step 3 / 3 — 파일 생성 중</div>
+    <div class="status-msg" id="step3Status">알림장을 불러오는 중입니다...<br>잠시만 기다려주세요 😊</div>
+    <div class="progress-wrap">
+      <div class="progress-bar-bg">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="progress-text" id="progressText">준비 중...</div>
+    </div>
+  </div>
+
+  <!-- STEP 4: 완료 -->
+  <div class="step" id="step4">
+    <div class="success-icon">🎉</div>
+    <div class="status-msg">
+      <strong>파일이 생성되었습니다!</strong><br>
+      다운로드가 자동으로 시작됩니다.<br>
+      시작되지 않으면 아래 버튼을 눌러주세요.
+    </div>
+    <button class="btn btn-primary" id="downloadBtn" onclick="downloadFile()">
+      📥 파일 다운로드
+    </button>
+    <button class="btn btn-secondary" onclick="restart()" style="margin-top:10px">
+      처음으로
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // 서버 주소 (배포 후 실제 주소로 변경)
+  const SERVER = window.location.origin;
+
+  let loginPopup = null;
+  let token = null;
+  let startYear = null;
+  let startMonth = null;
+  let downloadBlob = null;
+  let downloadFilename = null;
+  let tokenCheckInterval = null;
+
+  function showStep(n) {
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+  }
+
+  // ── STEP 1: 연월 입력 ──
+  function goStep2() {
+    const val = document.getElementById('startMonth').value;
+    if (!val) {
+      document.getElementById('step1Error').textContent = '시작 연월을 선택해주세요.';
+      return;
+    }
+    [startYear, startMonth] = val.split('-').map(Number);
+    document.getElementById('step1Error').textContent = '';
+    showStep(2);
+  }
+
+  // ── STEP 2: 로그인 팝업 ──
+  function openLogin() {
+    loginPopup = window.open(
+      'https://lifelogue.kr/auth/qrcode/login',
+      'lifelogue_login',
+      'width=420,height=680'
+    );
+
+    document.getElementById('step2Status').textContent =
+      'QR코드를 스캔한 후, 로그인 완료 버튼을 눌러주세요.';
+    document.getElementById('confirmLoginBtn').style.display = 'block';
+
+    // 팝업이 대시보드 URL로 전환되면 자동 감지 시도
+    tokenCheckInterval = setInterval(() => {
+      try {
+        if (loginPopup && loginPopup.closed) {
+          clearInterval(tokenCheckInterval);
+          document.getElementById('step2Status').textContent =
+            '창이 닫혔습니다. 아래 버튼으로 계속 진행해주세요.';
+          return;
+        }
+        // 같은 origin이면 localStorage 접근 가능
+        const t = loginPopup.localStorage.getItem('accessToken');
+        if (t) {
+          clearInterval(tokenCheckInterval);
+          token = 'Bearer ' + t;
+          proceedAfterLogin();
+        }
+      } catch (e) {
+        // cross-origin 제약으로 접근 불가 — 사용자가 직접 버튼 누르도록 유도
+      }
+    }, 1000);
+  }
+
+  function confirmLogin() {
+    clearInterval(tokenCheckInterval);
+
+    // 팝업 localStorage에서 토큰 읽기 시도
+    try {
+      if (loginPopup && !loginPopup.closed) {
+        const t = loginPopup.localStorage.getItem('accessToken');
+        if (t) {
+          token = 'Bearer ' + t;
+          loginPopup.close();
+          proceedAfterLogin();
+          return;
+        }
+      }
+    } catch (e) {
+      // cross-origin 차단 — fallback: 사용자에게 직접 입력 요청
+    }
+
+    // fallback: 토큰 직접 입력
+    const manual = prompt(
+      '자동 토큰 추출에 실패했습니다.\n\n' +
+      '라이프로그 로그인 창 > 개발자도구(F12) > Console에서\n' +
+      'localStorage.getItem("accessToken")\n' +
+      '를 입력하고 결과값을 복사해서 붙여넣어주세요.'
+    );
+    if (manual && manual.trim()) {
+      token = manual.trim().startsWith('Bearer ') ? manual.trim() : 'Bearer ' + manual.trim();
+      if (loginPopup && !loginPopup.closed) loginPopup.close();
+      proceedAfterLogin();
+    } else {
+      document.getElementById('step2Error').textContent = '토큰을 입력하지 않았습니다. 다시 시도해주세요.';
+    }
+  }
+
+  async function proceedAfterLogin() {
+    // 토큰 유효성 검증
+    document.getElementById('step2Status').textContent = '사용자 정보 확인 중...';
+    try {
+      const res = await fetch(`${SERVER}/api/user-info`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const info = await res.json();
+      document.getElementById('step2Status').textContent =
+        `✅ ${info.orgName} / ${info.childName}`;
+      setTimeout(() => generateFile(info), 800);
+    } catch (e) {
+      document.getElementById('step2Error').textContent =
+        '로그인 확인에 실패했습니다. 다시 로그인해주세요.';
+    }
+  }
+
+  // ── STEP 3: 파일 생성 ──
+  async function generateFile(userInfo) {
+    showStep(3);
+    setProgress(10, '서버에 요청 중...');
+
+    try {
+      setProgress(30, `${userInfo.childName}의 알림장을 수집하는 중...`);
+
+      const res = await fetch(`${SERVER}/api/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, start_year: startYear, start_month: startMonth }),
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(err);
+      }
+
+      setProgress(90, 'Word 파일 생성 중...');
+
+      const blob = await res.blob();
+      const disposition = res.headers.get('Content-Disposition') || '';
+      const nameMatch = disposition.match(/filename\*=UTF-8''(.+)/);
+      downloadFilename = nameMatch
+        ? decodeURIComponent(nameMatch[1])
+        : `${userInfo.childName}_알림장.docx`;
+
+      downloadBlob = blob;
+      setProgress(100, '완료!');
+      setTimeout(() => {
+        showStep(4);
+        downloadFile();
+      }, 600);
+
+    } catch (e) {
+      document.getElementById('step3Status').textContent =
+        `오류가 발생했습니다:\n${e.message}`;
+    }
+  }
+
+  function setProgress(pct, text) {
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressText').textContent = text;
+  }
+
+  // ── STEP 4: 다운로드 ──
+  function downloadFile() {
+    if (!downloadBlob) return;
+    const url = URL.createObjectURL(downloadBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = downloadFilename;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function restart() {
+    token = null; downloadBlob = null; downloadFilename = null;
+    document.getElementById('startMonth').value = '';
+    document.getElementById('step2Status').textContent = '';
+    document.getElementById('step2Error').textContent = '';
+    document.getElementById('confirmLoginBtn').style.display = 'none';
+    showStep(1);
+  }
+</script>
+</body>
+</html>
